@@ -3,6 +3,7 @@ import Group from "../models/group.model";
 import { CustomRequest } from "../types";
 import animalModel from "../models/animal.model";
 import { success_response } from "../utils/response";
+import groupModel from "../models/group.model";
 
 export const createGroup = async (req: Request, res: Response) => {
   try {
@@ -95,6 +96,37 @@ export const addAnimalsToGroup = async (req: CustomRequest, res: Response) => {
     let result = success_response(
       `Added ${addedAnimalCount} animals to the group ${group.name}`
     );
+    return res.status(200).json(result);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const getGroupMembers = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId!;
+    const groupId = req.params.id;
+
+    if (groupId === undefined) {
+      return res.status(400).json({ error: "Invalid group ID" });
+    }
+
+    const group = await groupModel.findById(groupId);
+    if (group === null) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    const animals = await groupModel.find({ userId, groupId });
+    const content = {
+      group,
+      animals,
+    };
+
+    const result = success_response(
+      "Group members fetched successfully",
+      content
+    );
+
     return res.status(200).json(result);
   } catch (error: any) {
     res.status(400).json({ error: error.message });

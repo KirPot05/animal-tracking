@@ -3,6 +3,8 @@ import AnimalModel from "../models/animal.model";
 import { z } from "zod";
 import { Types } from "mongoose";
 import { CustomRequest } from "../types";
+import GroupModel from "../models/group.model";
+import BreachModel from "../models/breach.model";
 
 export const createAnimal = async (req: Request, res: Response) => {
   const animalBodySchema = z.object({
@@ -44,6 +46,20 @@ export const getUserAnimals = async (req: CustomRequest, res: Response) => {
     const userId = req.userId!;
 
     const animals = await AnimalModel.find({ userId });
+
+    let animal: any;
+    for (animal of animals) {
+      if (!Types.ObjectId.isValid(animal.groupId)) continue;
+
+      const group = await GroupModel.findById(animal.groupId);
+      animal._doc.group = group;
+
+      const breaches = await BreachModel.countDocuments({
+        animalId: animal.id,
+      });
+
+      animal._doc.breaches = breaches;
+    }
 
     res.status(200).json(animals);
   } catch (error: any) {
