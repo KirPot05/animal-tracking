@@ -65,7 +65,7 @@ export const addAnimalsToGroup = async (req: CustomRequest, res: Response) => {
   try {
     const userId = req.userId!;
 
-    const groupId = req.body.groupId;
+    const groupId = req.params.id;
     const animals = req.body.animals;
 
     if (groupId === undefined || groupId === null) {
@@ -76,7 +76,7 @@ export const addAnimalsToGroup = async (req: CustomRequest, res: Response) => {
       return res.status(400).json({ error: "Group ID is required" });
     }
 
-    const group = await Group.findById(groupId);
+    const group = await Group.findOne({ _id: groupId, userId });
     if (group === null) {
       return res.status(404).json({ error: "Group not found" });
     }
@@ -93,7 +93,7 @@ export const addAnimalsToGroup = async (req: CustomRequest, res: Response) => {
     }
 
     let result = success_response(
-      `Added ${addedAnimalCount} to the group ${group.name}`
+      `Added ${addedAnimalCount} animals to the group ${group.name}`
     );
     return res.status(200).json(result);
   } catch (error: any) {

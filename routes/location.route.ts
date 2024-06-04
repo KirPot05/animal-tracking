@@ -5,14 +5,20 @@ import {
   getLocationById,
   deleteLocation,
   updateLocation,
+  getUserAnimalLocations,
 } from "../controllers/location.controller";
+import authMiddleware from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.post("/locations", createLocation);
-router.get("/locations", getLocations);
-router.get("/locations/:id", getLocationById);
-router.put("/locations/:id", updateLocation);
-router.delete("/locations/:id", deleteLocation);
+router.use(authMiddleware);
+
+router.post("/", createLocation);
+router.get("/", getLocations);
+
+router.get("/", getUserAnimalLocations);
+router.get("/:id", getLocationById);
+router.put("/:id", updateLocation);
+router.delete("/:id", deleteLocation);
 
 export default router;

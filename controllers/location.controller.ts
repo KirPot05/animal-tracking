@@ -5,6 +5,7 @@ import LocationModel from "../models/location.model";
 import { CustomRequest } from "../types";
 import GroupManagement from "../lib/group-management";
 import { success_response } from "../utils/response";
+import BreachModel from "../models/breach.model";
 
 export const createLocation = async (req: Request, res: Response) => {
   try {
@@ -55,6 +56,10 @@ export const getUserAnimalLocations = async (
     const [_, awayAnimalsWithDistances] =
       groupManagement.isAwayFromHerd(animalLocations);
 
+    for (let animal of awayAnimalsWithDistances) {
+      await BreachModel.create({ animalId: animal[0], dist: animal[1] });
+    }
+
     // Update the flag of the animal-location to used
     const animalLocationIds = animalLocations.map(
       (location) => location.locationId
@@ -69,7 +74,7 @@ export const getUserAnimalLocations = async (
       animalLocationUpdatePromises.push(promise);
     });
 
-    await Promise.all(animalLocationUpdatePromises);
+    // await Promise.all(animalLocationUpdatePromises);
 
     animalLocations.forEach((animalLocation) => {
       AnimalModel.findByIdAndUpdate(animalLocation.id, {
@@ -90,7 +95,7 @@ export const getUserAnimalLocations = async (
 
     let content = {
       animals: animalLocations.filter(
-        (location) => !awayAnimalsWithDistances.includes(location.id)
+        (location: any) => !awayAnimalsWithDistances.includes(location[0])
       ),
 
       awayAnimals: awayAnimalsWithDistances,
