@@ -5,6 +5,11 @@ export type Animal = {
   name: string;
   animalTypeId: Types.ObjectId;
   groupId: Types.ObjectId;
+  active: boolean;
+  loc_data?: {
+    lat: number;
+    lng: number;
+  };
 };
 
 const animalSchema = new Schema<Animal>(
@@ -20,6 +25,12 @@ const animalSchema = new Schema<Animal>(
     },
 
     groupId: { type: Schema.Types.ObjectId, ref: "group" },
+    active: { type: Boolean, default: true },
+
+    loc_data: {
+      lat: { type: Number },
+      lng: { type: Number },
+    },
   },
   { timestamps: true }
 );

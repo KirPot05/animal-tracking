@@ -1,6 +1,15 @@
 node_modules/
 
+# Build files
 build
 
+# Environment files
 .env
 .env.*
+
+# Seed files
+test.json
+result.json
+
+# Scripts
+scrape.js

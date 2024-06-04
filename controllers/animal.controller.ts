@@ -44,6 +44,7 @@ export const getUserAnimals = async (req: CustomRequest, res: Response) => {
     const userId = req.userId!;
 
     const animals = await AnimalModel.find({ userId });
+
     res.status(200).json(animals);
   } catch (error: any) {
     res.status(400).json({ error: error.message });

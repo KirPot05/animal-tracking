@@ -4,6 +4,7 @@ export type Location = {
   animalId: Types.ObjectId;
   lat: number;
   lng: number;
+  isDisplayed?: boolean;
 };
 
 const locationSchema = new Schema<Location>(
@@ -13,6 +14,8 @@ const locationSchema = new Schema<Location>(
     lat: { type: Number, required: true },
 
     lng: { type: Number, required: true },
+
+    isDisplayed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
