@@ -5,6 +5,7 @@ export type User = {
   userName: string;
   password: string;
   expoPushToken: string;
+  verified: boolean;
 };
 
 const userSchema = new Schema<User>(
@@ -19,6 +20,8 @@ const userSchema = new Schema<User>(
       type: String,
       default: "",
     },
+
+    verified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
