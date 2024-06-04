@@ -33,8 +33,15 @@ export async function userLogin(req: Request, res: Response) {
       user.password
     );
 
+    const isVerifiedUser = user.verified;
+
     if (!passwordMatches) {
       result = failed_response("Enter a valid password");
+      return res.status(403).json(result);
+    }
+
+    if (!isVerifiedUser) {
+      result = failed_response("User not verified");
       return res.status(403).json(result);
     }
 
