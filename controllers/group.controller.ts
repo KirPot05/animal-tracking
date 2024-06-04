@@ -4,6 +4,7 @@ import { CustomRequest } from "../types";
 import animalModel from "../models/animal.model";
 import { success_response } from "../utils/response";
 import groupModel from "../models/group.model";
+import { Types } from "mongoose";
 
 export const createGroup = async (req: Request, res: Response) => {
   try {
@@ -122,7 +123,12 @@ export const getGroupMembers = async (req: CustomRequest, res: Response) => {
       return res.status(404).json({ error: "Group not found" });
     }
 
-    const animals = await groupModel.find({ userId, groupId });
+    const animals = await animalModel.find({
+      userId,
+      groupId,
+    });
+
+    console.log(userId);
     const content = {
       group,
       animals,
