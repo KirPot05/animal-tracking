@@ -7,6 +7,7 @@ import {
   deleteGroup,
   addAnimalsToGroup,
   getGroupMembers,
+  getUserGroups,
 } from "../controllers/group.controller";
 import authMiddleware from "../middlewares/auth.middleware";
 
@@ -16,6 +17,7 @@ router.use(authMiddleware);
 
 router.post("/", createGroup);
 router.get("/", getGroups);
+router.get("/user", getUserGroups);
 router.get("/:id/animals", getGroupMembers);
 router.post("/:id/animals", addAnimalsToGroup);
 router.get("/:id", getGroupById);

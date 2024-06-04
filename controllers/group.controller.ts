@@ -144,3 +144,15 @@ export const getGroupMembers = async (req: CustomRequest, res: Response) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const getUserGroups = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId!;
+
+    const groups = await groupModel.findById({ userId });
+
+    return res.status(200).json(groups);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
