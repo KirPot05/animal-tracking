@@ -8,7 +8,10 @@ export const createAnimal = async (req: Request, res: Response) => {
     name: z.string().min(3, "Enter a valid name with atleast six characters"),
     userId: z.string().refine((id) => Types.ObjectId.isValid(id)),
     animalTypeId: z.string().refine((id) => Types.ObjectId.isValid(id)),
-    groupId: z.string().refine((id) => Types.ObjectId.isValid(id)),
+    groupId: z
+      .string()
+      .refine((id) => Types.ObjectId.isValid(id))
+      .optional(),
   });
 
   let result = {};

@@ -112,14 +112,16 @@ export async function createUser(req: Request, res: Response) {
 
 export async function getUser(req: CustomRequest, res: Response) {
   try {
-    const id = req.userId!;
-
-    const userId = jwt.verify(id, JWT_SECRET);
+    const userId = req.userId!;
 
     const user = await UserModel.findById(userId, {
       password: false,
       expoPushToken: false,
     });
+
+    if (user === null) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     return res.status(200).json(user);
   } catch (error: any) {
