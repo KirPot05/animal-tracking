@@ -7,6 +7,12 @@ import groupModel from "../models/group.model";
 
 export const createGroup = async (req: Request, res: Response) => {
   try {
+    const animals = req.body.animals;
+
+    if (!Array.isArray(animals)) {
+      return res.status(400).json({ error: "Group ID is required" });
+    }
+
     const group = await Group.create(req.body);
     res.status(201).json(group);
   } catch (error: any) {
