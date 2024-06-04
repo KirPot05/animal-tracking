@@ -32,7 +32,7 @@ const authMiddleware = (
     req.userId = userId;
 
     next();
-  } catch (error) {
+  } catch (error: any) {
     return res
       .status(401)
       .json(

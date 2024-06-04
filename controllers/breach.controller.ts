@@ -5,7 +5,7 @@ export const createBreach = async (req: Request, res: Response) => {
   try {
     const breach = await Breach.create(req.body);
     res.status(201).json(breach);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -14,7 +14,7 @@ export const getBreaches = async (req: Request, res: Response) => {
   try {
     const breaches = await Breach.find();
     res.status(200).json(breaches);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -26,7 +26,7 @@ export const getBreachById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Breach not found" });
     }
     res.status(200).json(breach);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -41,7 +41,7 @@ export const updateBreach = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Breach not found" });
     }
     res.status(200).json(breach);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -53,7 +53,7 @@ export const deleteBreach = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Breach not found" });
     }
     res.status(200).json({ message: "Breach deleted successfully" });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };

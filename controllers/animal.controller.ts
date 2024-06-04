@@ -21,7 +21,7 @@ export const createAnimal = async (req: Request, res: Response) => {
 
     const animal = await AnimalModel.create(req.body);
     res.status(201).json(animal);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -30,7 +30,7 @@ export const getAnimals = async (req: Request, res: Response) => {
   try {
     const animals = await AnimalModel.find();
     res.status(200).json(animals);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -42,7 +42,7 @@ export const getAnimalById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Animal not found" });
     }
     res.status(200).json(animal);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -61,7 +61,7 @@ export const updateAnimal = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Animal not found" });
     }
     res.status(200).json(animal);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -73,7 +73,7 @@ export const deleteAnimal = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Animal not found" });
     }
     res.status(200).json({ message: "Animal deleted successfully" });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };

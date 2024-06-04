@@ -5,7 +5,7 @@ export const createLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.create(req.body);
     res.status(201).json(location);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -14,7 +14,7 @@ export const getLocations = async (req: Request, res: Response) => {
   try {
     const locations = await Location.find();
     res.status(200).json(locations);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -26,7 +26,7 @@ export const getLocationById = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Location not found" });
     }
     res.status(200).json(location);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -41,7 +41,7 @@ export const updateLocation = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Location not found" });
     }
     res.status(200).json(location);
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
@@ -53,7 +53,7 @@ export const deleteLocation = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Location not found" });
     }
     res.status(200).json({ message: "Location deleted successfully" });
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
 };
