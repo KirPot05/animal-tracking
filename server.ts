@@ -21,11 +21,11 @@ export function startServer() {
     app.use(morgan("dev"));
   }
 
-  app.use("/v1/auth", authRoutes);
-  app.use("/v1/animals", animalRoutes);
-  app.use("/v1/groups", groupRoutes);
-  app.use("/v1/animal-types", animalTypeRoutes);
-  app.use("/v1/locations", locationRoutes);
+  app.use("/api/v1/auth", authRoutes);
+  app.use("/api/v1/animals", animalRoutes);
+  app.use("/api/v1/groups", groupRoutes);
+  app.use("/api/v1/animal-types", animalTypeRoutes);
+  app.use("/api/v1/locations", locationRoutes);
 
   app.get("/", (req, res) => {
     res.send("Hello from System!");
