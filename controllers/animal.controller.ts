@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AnimalModel from "../models/animal.model";
 import { z } from "zod";
 import { Types } from "mongoose";
+import { CustomRequest } from "../types";
 
 export const createAnimal = async (req: Request, res: Response) => {
   const animalBodySchema = z.object({
@@ -32,6 +33,17 @@ export const createAnimal = async (req: Request, res: Response) => {
 export const getAnimals = async (req: Request, res: Response) => {
   try {
     const animals = await AnimalModel.find();
+    res.status(200).json(animals);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const getUserAnimals = async (req: CustomRequest, res: Response) => {
+  try {
+    const userId = req.userId!;
+
+    const animals = await AnimalModel.find({ userId });
     res.status(200).json(animals);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
