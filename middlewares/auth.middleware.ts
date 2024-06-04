@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { JWT_SECRET } from "../config";
 
 type CustomRequest = Request & {
-  userId: string;
+  userId?: string;
 };
 
 const authMiddleware = (
@@ -22,9 +22,8 @@ const authMiddleware = (
   }
 
   try {
-    // User verification
     const userId = jwt.verify(token, JWT_SECRET) as string;
-    // console.log(data);
+
     if (userId === undefined) {
       return res.status(403).json(failed_response("Unauthorized access"));
     }

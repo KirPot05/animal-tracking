@@ -8,6 +8,9 @@ import {
   getAuthToken,
   isCorrectPassword,
 } from "../utils/password";
+import { JWT_SECRET } from "../config";
+import jwt from "jsonwebtoken";
+import { CustomRequest } from "../types";
 
 export async function userLogin(req: Request, res: Response) {
   const credentials = z.object({
@@ -102,6 +105,24 @@ export async function createUser(req: Request, res: Response) {
 
     return res.status(200).json(result);
   } catch (error: unknown) {
+    console.error(error);
+    return res.status(500).json({ message: "Error in creating user" });
+  }
+}
+
+export async function getUser(req: CustomRequest, res: Response) {
+  try {
+    const id = req.userId!;
+
+    const userId = jwt.verify(id, JWT_SECRET);
+
+    const user = await UserModel.findById(userId, {
+      password: false,
+      expoPushToken: false,
+    });
+
+    return res.status(200).json(user);
+  } catch (error: any) {
     console.error(error);
     return res.status(500).json({ message: "Error in creating user" });
   }
