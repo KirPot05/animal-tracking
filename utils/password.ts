@@ -23,3 +23,14 @@ export async function getAuthToken(data: any) {
   const token = sign(data, JWT_SECRET);
   return token;
 }
+
+export function generateRandomUsername(length: number = 8) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let username = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    username += characters[randomIndex];
+  }
+  return username;
+}

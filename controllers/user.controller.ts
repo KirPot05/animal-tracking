@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import UserModel, { User } from "../models/user.model";
 import { failed_response, success_response } from "../utils/response";
-import { ZodError, z } from "zod";
+import { z } from "zod";
 import {
   encryptPassword,
+  generateRandomUsername,
   getAuthToken,
   isCorrectPassword,
 } from "../utils/password";
-// import { Types } from "mongoose";
-// import { CustomRequest } from "../types";
 
 export async function userLogin(req: Request, res: Response) {
   const credentials = z.object({
@@ -33,6 +32,7 @@ export async function userLogin(req: Request, res: Response) {
       creds.password,
       user.password
     );
+
     if (!passwordMatches) {
       result = failed_response("Enter a valid password");
       return res.status(403).json(result);
@@ -52,11 +52,11 @@ export async function userLogin(req: Request, res: Response) {
 
 export async function createUser(req: Request, res: Response) {
   const userFields = z.object({
+    name: z.string().min(3, "Name is a required"),
     email: z.string().min(1, "Email is a required parameter").email(),
     password: z
       .string()
       .min(6, "Enter a valid password with atleast six characters"),
-    role: z.enum(["teacher", "student"]).optional(),
   });
 
   let result = {};
@@ -71,10 +71,21 @@ export async function createUser(req: Request, res: Response) {
     }
 
     const encryptedPassword = await encryptPassword(creds.password);
-    const userDetails: z.infer<typeof userFields> = {
+
+    let userName = creds.name.split(" ").join("_");
+
+    let isValidUserName = await UserModel.findOne({ userName });
+
+    while (isValidUserName != null) {
+      userName = creds.name.split(" ").join("_") + generateRandomUsername(5);
+      isValidUserName = await UserModel.findOne({ userName });
+    }
+
+    const userDetails: z.infer<typeof userFields> & { userName: string } = {
+      name: creds.name,
       email: creds.email,
       password: encryptedPassword,
-      role: creds.role ?? "student",
+      userName,
     };
 
     user = await UserModel.create(userDetails);
