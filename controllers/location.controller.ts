@@ -7,6 +7,26 @@ import GroupManagement from "../lib/group-management";
 import { success_response } from "../utils/response";
 import BreachModel from "../models/breach.model";
 
+let cnt = 0;
+
+const updateUserLocations = async () => {
+  const animals = await AnimalModel.find();
+
+  const animalLocations = animals.map((animal) => ({
+    animalId: animal.id,
+    lat: animal.loc_data?.lat! + 0.01,
+    lng: animal.loc_data?.lng! + 0.01,
+  }));
+
+  if (cnt > 3) {
+    animalLocations[cnt].lat += 0.5;
+  }
+
+  cnt++;
+
+  return animalLocations;
+};
+
 export const createLocation = async (req: Request, res: Response) => {
   try {
     const location = await Location.create(req.body);
@@ -30,6 +50,12 @@ export const getUserAnimalLocations = async (
   res: Response
 ) => {
   try {
+    let updatedLocations = await updateUserLocations();
+    updatedLocations = updatedLocations.filter(
+      (loc) => !Number.isNaN(loc.lat) && !Number.isNaN(loc.lng)
+    );
+    await LocationModel.insertMany(updatedLocations);
+
     const userId = req.userId!;
     // Find user's animals
     const animals = await AnimalModel.find({ userId });
@@ -79,14 +105,23 @@ export const getUserAnimalLocations = async (
 
     await Promise.all(animalLocationUpdatePromises);
 
-    animalLocations.forEach((animalLocation) => {
-      AnimalModel.findByIdAndUpdate(animalLocation.id, {
+    // animalLocations.forEach(async (animalLocation) => {
+    //   await AnimalModel.findByIdAndUpdate(animalLocation.id, {
+    //     loc_data: {
+    //       lat: animalLocation.lat,
+    //       lng: animalLocation.lng,
+    //     },
+    //   });
+    // });
+
+    for (const animalL of animalLocations) {
+      await AnimalModel.findByIdAndUpdate(animalL.id, {
         loc_data: {
-          lat: animalLocation.lat,
-          lng: animalLocation.lng,
+          lat: animalL.lat,
+          lng: animalL.lng,
         },
       });
-    });
+    }
 
     // Send away animals as well as other animals
     /*

@@ -22,6 +22,19 @@ async function main() {
 
 main();
 
+async function helper() {
+  const groups = ["665f5f13647db67cf8147669", "665fbb062faf5a8bec551d19"];
+
+  let animals = await animalModel.find();
+  for (let i = 0; i < 11; i++) {
+    await animalModel.findByIdAndUpdate(animals[i].id, {
+      groupId: i < 6 ? groups[0] : groups[1],
+    });
+  }
+}
+
+// helper();
+
 async function util() {
   await locationModel.deleteMany({});
   await breachModel.deleteMany({});
