@@ -10,6 +10,7 @@ build
 # Seed files
 test.json
 result.json
+result2.json
 
 # Scripts
 scrape.js

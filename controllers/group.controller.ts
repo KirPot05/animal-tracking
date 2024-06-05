@@ -15,6 +15,13 @@ export const createGroup = async (req: Request, res: Response) => {
     }
 
     const group = await Group.create(req.body);
+
+    for (const animalId of animals) {
+      await animalModel.findByIdAndUpdate(animalId, {
+        groupId: group.id,
+      });
+    }
+
     res.status(201).json(group);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
