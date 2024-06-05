@@ -16,7 +16,7 @@ router.use(authMiddleware);
 router.post("/", createLocation);
 router.get("/", getLocations);
 
-router.get("/", getUserAnimalLocations);
+router.get("/user", getUserAnimalLocations);
 router.get("/:id", getLocationById);
 router.put("/:id", updateLocation);
 router.delete("/:id", deleteLocation);

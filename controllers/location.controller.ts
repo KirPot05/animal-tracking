@@ -38,7 +38,10 @@ export const getUserAnimalLocations = async (
     // Find locations of these animals
     for (const animal of animals) {
       const animalId = animal.id;
-      const locations = await LocationModel.find({ animalId }).sort({
+      const locations = await LocationModel.find({
+        animalId,
+        isDisplayed: false,
+      }).sort({
         createdAt: -1,
       });
       const updatedLocations = locations.map((location) => ({
@@ -74,7 +77,7 @@ export const getUserAnimalLocations = async (
       animalLocationUpdatePromises.push(promise);
     });
 
-    // await Promise.all(animalLocationUpdatePromises);
+    await Promise.all(animalLocationUpdatePromises);
 
     animalLocations.forEach((animalLocation) => {
       AnimalModel.findByIdAndUpdate(animalLocation.id, {
