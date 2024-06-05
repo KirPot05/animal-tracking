@@ -148,8 +148,9 @@ export const getGroupMembers = async (req: CustomRequest, res: Response) => {
 export const getUserGroups = async (req: CustomRequest, res: Response) => {
   try {
     const userId = req.userId!;
+    console.log(userId);
 
-    const groups = await groupModel.findById({ userId });
+    const groups = await groupModel.find({ userId });
 
     return res.status(200).json(groups);
   } catch (error: any) {
