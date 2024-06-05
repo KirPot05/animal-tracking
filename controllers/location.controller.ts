@@ -14,12 +14,12 @@ const updateUserLocations = async () => {
 
   const animalLocations = animals.map((animal) => ({
     animalId: animal.id,
-    lat: animal.loc_data?.lat! + 0.01,
-    lng: animal.loc_data?.lng! + 0.01,
+    lat: animal.loc_data?.lat! + 0.000001,
+    lng: animal.loc_data?.lng! + 0.0000005,
   }));
 
   if (cnt > 3) {
-    animalLocations[cnt].lat += 0.5;
+    animalLocations[cnt].lat += 0.005;
   }
 
   cnt++;
